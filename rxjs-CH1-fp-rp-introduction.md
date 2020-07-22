@@ -178,3 +178,5 @@ observable.name = 'Tom Steele';
 // Should log our updated name
 console.log(observer.currentName);
  ```
+
+[Next up - RxJS Introduction](rxjs-CH2-rxjs-introduction.md)
