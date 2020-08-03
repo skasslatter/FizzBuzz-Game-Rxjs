@@ -34,6 +34,7 @@ Functional Programming is a process for development that focuses on building sma
         // Pure function
         // add only cares about the values passed into the function
         const add = (a: number, b: number) => a + b;
+        add(add(1,2), add(3, 4))
         
         // Impure function
         // addTax Uses a value from outside the scope of the function to calculate the result
@@ -123,7 +124,7 @@ Remove the provided observer from the list of dependants on the Observable
 ```typescript
 class SimpleObservable implements Observable {
     // Maintains a list of its dependants
-		private observers: Observer[] = [];
+	private observers: Observer[] = [];
     private _name: string = '';
   
     get name(): string {
@@ -139,7 +140,7 @@ class SimpleObservable implements Observable {
     }
 
     // Add a depdendant to the list
-		public subscribe(obs: Observer) {
+	public subscribe(obs: Observer) {
       	this.observers.push(obs);
     }
     

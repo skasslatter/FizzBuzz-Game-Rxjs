@@ -27,6 +27,8 @@ import { map } from 'rxjs/operators';
     FizzBuzz
 */
 
-const fizzBuzz$ = interval(1000).pipe(map(n => n += 1));
+const fizzBuzz$ = interval(1000).pipe(
+    map(n => n += 1)
+);
 
 export default fizzBuzz$;

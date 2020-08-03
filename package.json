@@ -4,8 +4,9 @@
     "description": "This block of your bootcamp will dive into the testing of your angular application with Karma. In this block you will learn what Karma is, what to test and what not to test and ofcourse how to create the actual test.",
     "main": "index.js",
     "scripts": {
-        "start": "npm run start:prod",
-        "dev": "npm run start:dev",
+        "start": "npx webpack",
+        "watch": "npx webpack --watch",
+        "assignment": "node ./build",
         "tsc": "tsc",
         "start:dev": "ts-node-dev --respawn --transpileOnly ./server.ts",
         "start:prod": "tsc && node ./dist/server.js",
