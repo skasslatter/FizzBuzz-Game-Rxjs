@@ -1,5 +1,5 @@
-import { zip, interval, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {interval, Observable, zip} from 'rxjs';
+import {map, take} from 'rxjs/operators';
 
 /* 
     Using the operators imported above build a script that will
@@ -27,8 +27,19 @@ import { map } from 'rxjs/operators';
     FizzBuzz
 */
 
-const fizzBuzz$ = interval(1000).pipe(
-    map(n => n += 1)
-);
+const numbers$: Observable<number> = interval(1000)
+    .pipe(map(n => n += 1))
+    .pipe(take(20));
+
+const fizz$: Observable<string> = numbers$
+    .pipe(map(n => n % 3 === 0 ? 'Fizz' : '')
+    );
+
+const buzz$: Observable<string> = numbers$
+    .pipe(map(n => n % 5 === 0 ? 'Buzz' : '')
+    );
+
+const fizzBuzz$ = zip(numbers$, fizz$, buzz$)
+    .pipe(map(([n, fizz, buzz]) => `${fizz}${buzz}` || n))
 
 export default fizzBuzz$;
