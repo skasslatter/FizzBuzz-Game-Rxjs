@@ -1,5 +1,8 @@
 import fizzBuzz from './assignment-1';
+import {take} from "rxjs/operators";
 
-fizzBuzz.subscribe(v => {
-        console.log(v)
-});
+fizzBuzz
+    .pipe(take(10))
+    .subscribe(v => {
+        console.log(v);
+    });
