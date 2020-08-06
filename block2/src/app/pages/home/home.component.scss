@@ -1,5 +1,11 @@
-.fizzBuzz-buttons, .explanation {
+.main, .explanation, .fizzBuzz-buttons, .answers {
   margin: 5vh;
 }
 
+.correct {
+  color: green;
+}
 
+.wrong {
+  color: red;
+}

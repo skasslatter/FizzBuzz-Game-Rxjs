@@ -1,12 +1,12 @@
-<div class="container">
+<div class="container main">
 
   <h1 class="text-center">Guess the next one</h1>
 
   <div class="explanation">
-    <p>Press <b>Fizz</b> if the number can be divided by 3</p>
-    <p>Press <b>Buzz</b> if the number can be divided by 5</p>
-    <p>Press <b>FizzBuzz</b> if the number can be divided by 3 and 5</p>
-    <p>Press <b>the number</b> if none of the above are applicable</p>
+    <p><b>Fizz</b>: if the number can be divided by 3</p>
+    <p><b>Buzz</b>: if the number can be divided by 5</p>
+    <p><b>FizzBuzz</b>: if the number can be divided by 3 and 5</p>
+    <p><b>Number</b>: if none of the above are applicable</p>
 
   </div>
 
@@ -15,7 +15,7 @@
     <button class="btn btn-danger" *ngIf="isRunning" (click)="stopCounter()">RESET</button>
   </div>
 
-  <div *ngIf="isRunning">
+  <div class="answers" *ngIf="isRunning">
     <div class="d-flex justify-content-around fizzBuzz-buttons">
       <button class="btn btn-primary" (click)="guessNextValue(counter.toString())">{{counter}}</button>
       <button class="btn btn-primary" (click)="guessNextValue('Fizz')">Fizz</button>
@@ -24,12 +24,12 @@
     </div>
 
     <div class="row">
-      <p class="col-sm-5">Your answer: {{guessedNextValue}}</p>
-      <p *ngIf="isCorrect" class="col-sm-5">Well done</p>
-      <p *ngIf="!isCorrect && isCorrect != null" class="col-sm-5">Wrong</p>
+      <p class="col-sm-5"><b>Your answer: </b>{{guessedNextValue}}</p>
+      <p *ngIf="isCorrect" class="col-sm-5 correct">Well done!</p>
+      <p *ngIf="!isCorrect && isCorrect != null" class="col-sm-5 wrong">Wrong answer</p>
     </div>
 
-    <p>Correct answer: {{currentValue}}</p>
-    <p>Your score: {{score}}</p>
+    <p><b>Correct answer:</b> {{currentValue}}</p>
+    <p><b>Your score:</b> {{score}}</p>
   </div>
 </div>

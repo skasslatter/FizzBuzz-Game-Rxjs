@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
   guessedNextValue: string;
   isRunning = false;
   score = 0;
-  message: string;
   isCorrect: boolean = null;
 
   constructor(
@@ -34,13 +33,13 @@ export class HomeComponent implements OnInit {
         this.counter++;
         this.currentValue = response;
         this.calcPoints();
+        this.guessedNextValue = '';
       });
   }
 
   guessNextValue(value: string): void {
     this.isCorrect = null;
     this.guessedNextValue = value;
-    this.message = '';
     this.currentValue = '';
   }
 
@@ -48,10 +47,8 @@ export class HomeComponent implements OnInit {
     if (this.guessedNextValue === this.currentValue) {
       this.score++;
       this.isCorrect = true;
-      // this.message = 'Correct!';
     } else {
       this.isCorrect = false;
-      // this.message = 'No, wrong';
     }
   }
 
