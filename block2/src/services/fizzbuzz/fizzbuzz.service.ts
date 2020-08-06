@@ -11,7 +11,7 @@ export class FizzbuzzService {
   }
 
   get(): Observable<string> {
-    const numbers$: Observable<number> = interval(3000)
+    const numbers$: Observable<number> = interval(5000)
       .pipe(map(n => n += 1));
 
     const fizz$: Observable<string> = numbers$

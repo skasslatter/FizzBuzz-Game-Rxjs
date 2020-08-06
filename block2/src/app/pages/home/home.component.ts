@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FizzbuzzService} from "../../../services/fizzbuzz/fizzbuzz.service";
-import {take} from "rxjs/operators";
-import {Subscription} from "rxjs";
+import {FizzbuzzService} from '../../../services/fizzbuzz/fizzbuzz.service';
+import {take} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -12,9 +12,11 @@ export class HomeComponent implements OnInit {
   counter = 1;
   subscription: Subscription;
   currentValue: string;
-  previousValue: string;
   guessedNextValue: string;
   isRunning = false;
+  score = 0;
+  message: string;
+  isCorrect: boolean = null;
 
   constructor(
     private fizzBuzzService: FizzbuzzService,
@@ -30,24 +32,36 @@ export class HomeComponent implements OnInit {
       .pipe(take(15))
       .subscribe(response => {
         this.counter++;
-        this.previousValue = this.currentValue;
         this.currentValue = response;
-        if (this.guessedNextValue === this.currentValue) {
-          console.log('hurray');
-        }
+        this.calcPoints();
       });
+  }
+
+  guessNextValue(value: string): void {
+    this.isCorrect = null;
+    this.guessedNextValue = value;
+    this.message = '';
+    this.currentValue = '';
+  }
+
+  calcPoints(): void {
+    if (this.guessedNextValue === this.currentValue) {
+      this.score++;
+      this.isCorrect = true;
+      // this.message = 'Correct!';
+    } else {
+      this.isCorrect = false;
+      // this.message = 'No, wrong';
+    }
   }
 
   stopCounter(): void {
     this.isRunning = false;
+    this.guessedNextValue = '';
     this.currentValue = '';
-    this.previousValue = '';
     this.counter = 1;
+    this.score = 0;
+    this.isCorrect = null;
     this.subscription.unsubscribe();
-  }
-
-  guessNext(value: string): void {
-    console.log('clicked value', value);
-    this.guessedNextValue = value;
   }
 }
