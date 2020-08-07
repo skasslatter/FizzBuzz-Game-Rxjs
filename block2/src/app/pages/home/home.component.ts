@@ -11,9 +11,10 @@ import {FizzBuzzService} from '../../../services/fizzbuzz/fizz-buzz.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  counter = 1;
   FizzBuzzSubscription: Subscription;
   countDownSubscription: Subscription;
+
+  counter = 1;
   currentValue: string;
   guessedNextValue: string;
   isRunning = false;
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit {
     this.countDownSubscription = this.countDownService
       .get()
       .subscribe(response => {
-        console.log(response);
+        this.countDown = response;
       });
   }
 
@@ -77,6 +78,7 @@ export class HomeComponent implements OnInit {
   stopCounter(): void {
     this.resetValues();
     this.isRunning = false;
+    this.isCorrect = null;
     this.currentValue = '';
     this.counter = 1;
     this.score = 0;

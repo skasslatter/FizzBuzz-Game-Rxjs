@@ -1,5 +1,14 @@
-.main, .explanation, .fizzBuzz-buttons, .answers {
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+
+.explanation, .fizzBuzz-buttons, .answers {
   margin: 5vh;
+}
+
+.main {
+  margin: 5vh;
+  padding: 5vh;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .correct {
@@ -8,4 +17,14 @@
 
 .wrong {
   color: red;
+}
+
+.digital {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.reset {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
 }
