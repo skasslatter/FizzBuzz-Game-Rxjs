@@ -13,7 +13,7 @@
     <button class="btn btn-info" *ngIf="!isRunning" (click)="startFizzBuzz()">START</button>
     <div *ngIf="isRunning" class="row reset">
       <p class="digital col-sm-3">00:0{{countDown}}</p>
-      <button class="btn btn-danger col-sm-3" (click)="stopCounter()">RESET</button>
+      <button class="btn btn-danger" (click)="stopCounter()">RESET</button>
     </div>
   </div>
 
@@ -26,14 +26,31 @@
       <button class="btn btn-primary" (click)="guessNextValue('FizzBuzz')">FizzBuzz</button>
     </div>
 
+    <table class="table table-striped">
+      <tbody>
+      <tr>
+        <th scope="row">Your answer:</th>
+        <td class="answers">{{guessedNextValue}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Correct answer:</th>
+        <td>{{currentValue}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Score:</th>
+        <td>{{score}}</td>
+      </tr>
+      </tbody>
+    </table>
+
     <div class="row">
-      <p class="col-sm-5"><b>Your answer: </b>{{guessedNextValue}}</p>
+<!--      <p class="col-sm-3"><b>Your answer: </b>{{guessedNextValue}}</p>-->
       <p *ngIf="isCorrect" class="col-sm-5 correct">Well done!</p>
       <p *ngIf="!isCorrect && isCorrect != null" class="col-sm-5 wrong">Wrong answer</p>
     </div>
 
-    <p><b>Correct answer: </b> {{currentValue}}</p>
-    <p><b>Score: </b>{{score}}</p>
+<!--    <p><b>Correct answer: </b> {{currentValue}}</p>-->
+<!--    <p><b>Score: </b>{{score}}</p>-->
 
   </div>
 </div>

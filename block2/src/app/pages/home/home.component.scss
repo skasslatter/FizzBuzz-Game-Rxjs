@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 
-.explanation, .fizzBuzz-buttons, .answers {
+.explanation, .fizzBuzz-buttons {
   margin: 5vh;
 }
 
 .main {
-  margin: 5vh;
   padding: 5vh;
   background-color: rgba(255, 255, 255, 0.5);
 }
@@ -27,4 +26,8 @@
   display: flex;
   justify-content: center;
   align-items: baseline;
+}
+
+.answers {
+  min-width: 8vw;
 }
