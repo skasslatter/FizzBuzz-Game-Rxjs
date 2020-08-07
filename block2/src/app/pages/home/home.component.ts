@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FizzbuzzService} from '../../../services/fizzbuzz/fizzbuzz.service';
 import {take} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
+import {CountDownService} from '../../../services/countdown/count-down.service';
+import {FizzBuzzService} from '../../../services/fizzbuzz/fizz-buzz.service';
+
 
 @Component({
   selector: 'app-home',
@@ -10,31 +12,51 @@ import {Subscription} from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   counter = 1;
-  subscription: Subscription;
+  FizzBuzzSubscription: Subscription;
+  countDownSubscription: Subscription;
   currentValue: string;
   guessedNextValue: string;
   isRunning = false;
   score = 0;
   isCorrect: boolean = null;
+  countDown: number;
 
   constructor(
-    private fizzBuzzService: FizzbuzzService,
+    private fizzBuzzService: FizzBuzzService,
+    private countDownService: CountDownService,
   ) {
   }
 
   ngOnInit(): void {
   }
 
-  getFizzBuzz(): void {
+  startCountDown(): void {
+    if (this.countDownSubscription) {
+      this.countDownSubscription.unsubscribe();
+    }
+    this.countDownSubscription = this.countDownService
+      .get()
+      .subscribe(response => {
+        console.log(response);
+      });
+  }
+
+  startFizzBuzz(): void {
     this.isRunning = true;
-    this.subscription = this.fizzBuzzService.get()
+    this.startCountDown();
+    this.FizzBuzzSubscription = this.fizzBuzzService.get()
       .pipe(take(15))
       .subscribe(response => {
+        this.startCountDown();
         this.counter++;
         this.currentValue = response;
         this.calcPoints();
-        this.guessedNextValue = '';
+        this.resetValues();
       });
+  }
+
+  resetValues(): void {
+    this.guessedNextValue = '';
   }
 
   guessNextValue(value: string): void {
@@ -53,12 +75,12 @@ export class HomeComponent implements OnInit {
   }
 
   stopCounter(): void {
+    this.resetValues();
     this.isRunning = false;
-    this.guessedNextValue = '';
     this.currentValue = '';
     this.counter = 1;
     this.score = 0;
-    this.isCorrect = null;
-    this.subscription.unsubscribe();
+    this.FizzBuzzSubscription.unsubscribe();
+    this.countDownSubscription.unsubscribe();
   }
 }

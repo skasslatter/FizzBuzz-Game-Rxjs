@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FizzBuzzService } from './fizz-buzz.service';
+import { CountDownService } from './count-down.service';
 
-describe('FizzbuzzService', () => {
-  let service: FizzBuzzService;
+describe('CountdownService', () => {
+  let service: CountDownService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FizzBuzzService);
+    service = TestBed.inject(CountDownService);
   });
 
   it('should be created', () => {
