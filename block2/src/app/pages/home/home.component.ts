@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {take} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
-import {CountDownService} from '../../../services/countdown/count-down.service';
-import {FizzBuzzService} from '../../../services/fizzbuzz/fizz-buzz.service';
+import {CountDownService} from '../../services/countdown/count-down.service';
+import {FizzBuzzService} from '../../services/fizzbuzz/fizz-buzz.service';
 
 
 @Component({
