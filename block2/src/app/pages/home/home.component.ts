@@ -52,18 +52,14 @@ export class HomeComponent implements OnInit {
         this.counter++;
         this.currentValue = response;
         this.calcPoints();
-        this.resetValues();
+        this.guessedNextValue = '';
       });
-  }
-
-  resetValues(): void {
-    this.guessedNextValue = '';
   }
 
   guessNextValue(value: string): void {
     this.isCorrect = null;
-    this.guessedNextValue = value;
     this.currentValue = '';
+    this.guessedNextValue = value;
   }
 
   calcPoints(): void {
@@ -76,7 +72,7 @@ export class HomeComponent implements OnInit {
   }
 
   stopCounter(): void {
-    this.resetValues();
+    this.guessedNextValue = '';
     this.isRunning = false;
     this.isCorrect = null;
     this.currentValue = '';
