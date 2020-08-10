@@ -17,13 +17,31 @@
     </div>
   </div>
 
-  <div class="answers" *ngIf="isRunning">
+  <div class="answers">
 
     <div class="d-flex justify-content-around fizzBuzz-buttons">
-      <button class="btn btn-primary" (click)="guessNextValue(counter.toString())">{{counter}}</button>
-      <button class="btn btn-primary" (click)="guessNextValue('Fizz')">Fizz</button>
-      <button class="btn btn-primary" (click)="guessNextValue('Buzz')">Buzz</button>
-      <button class="btn btn-primary" (click)="guessNextValue('FizzBuzz')">FizzBuzz</button>
+      <button
+        id="nr-btn"
+        class="btn btn-primary">
+      <!--        (click)="guessNextValue(counter.toString())"-->
+      {{counter}}</button>
+      <button
+        id="fizz-btn"
+        class="btn btn-primary">
+      <!--        (click)="guessNextValue('Fizz')"-->
+      Fizz</button>
+      <button
+        id="buzz-btn"
+        class="btn btn-primary">
+      <!--        (click)="guessNextValue('Buzz')">-->
+      Buzz
+      </button>
+      <button
+        id="fizzBuzz-btn"
+        class="btn btn-primary">
+      <!--        (click)="guessNextValue('FizzBuzz')">-->
+      FizzBuzz
+      </button>
     </div>
 
     <table class="table table-striped">

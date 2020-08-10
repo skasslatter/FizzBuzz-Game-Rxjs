@@ -23,7 +23,8 @@ export class FizzBuzzService {
       );
 
     return  zip(numbers$, fizz$, buzz$)
-      .pipe(map(([n, fizz, buzz]) => `${fizz}${buzz}` || n.toString()));
+      .pipe(map(([n, fizz, buzz]) =>
+        `${fizz}${buzz}` || n.toString()));
   }
 }
 
