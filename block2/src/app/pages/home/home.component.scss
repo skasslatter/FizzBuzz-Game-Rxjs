@@ -1,22 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 
-.explanation, .fizzBuzz-buttons {
-  margin: 5vh;
+.explanation {
+  margin: 5vh 0;
+  text-align: center;
 }
 
 .main {
   padding: 5vh;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
   margin-top: 5vh
 }
 
 .correct {
   color: green;
+  font-weight: 600;
 }
 
 .wrong {
   color: red;
+  font-weight: 600;
 }
 
 .digital {
@@ -29,6 +32,35 @@
   align-items: baseline;
 }
 
-.answers {
-  min-width: 8vw;
+.start-btn {
+  background: var(--base-color);
+  color: whitesmoke;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+.fizzBuzz-buttons {
+  margin: 5vh;
+  visibility: visible;
+  display: flex;
+  justify-content: space-evenly;
+  button {
+    background-color: darken(#ff7800, 5%);
+    color: whitesmoke;
+  }
+}
+
+table td {
+  text-align: center;
+}
+
+table{
+  table-layout: fixed;
+  //width: 50vw;
+}
+
+.rules {
+  color: var(--secondary-color);
 }

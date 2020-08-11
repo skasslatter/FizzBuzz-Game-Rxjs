@@ -16,7 +16,7 @@ export class FizzBuzzService {
   }
 
   get(): Observable<string> {
-    this.numbers$ = timer(0, 3000).pipe(
+    this.numbers$ = timer(0, 5000).pipe(
       map(n => n + 1),
       share(),
     );

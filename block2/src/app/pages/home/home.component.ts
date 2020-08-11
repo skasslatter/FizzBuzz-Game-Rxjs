@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {first, mapTo, scan, share, switchMap} from 'rxjs/operators';
+import {first, mapTo, scan, share, switchMap, takeLast} from 'rxjs/operators';
 import {fromEvent, merge, Observable, Subscription, zip} from 'rxjs';
 import {CountDownService, FizzBuzzService} from '../../services/';
 import {Choice, Input} from '../../models/choice';
@@ -18,10 +18,8 @@ export class HomeComponent implements OnInit {
   countDownSubscription: Subscription;
 
   counter = 1;
-  currentValue: string;
   guessedNextValue: string;
   isRunning = false;
-  score = 0;
   isCorrect: boolean = null;
   countDown: number;
   private nrInput$: Observable<Event>;
@@ -30,6 +28,7 @@ export class HomeComponent implements OnInit {
   private fizzBuzzInput$: Observable<Event>;
   userScore$: Observable<number>;
   numbers$: Observable<number>;
+  correctAnswer: 'Fizz' | 'Buzz' | 'FizzBuzz' | 'Number';
 
   constructor(
     private fizzBuzzService: FizzBuzzService,
@@ -57,16 +56,44 @@ export class HomeComponent implements OnInit {
   }
 
   startFizzBuzz(): void {
+    this.isRunning = true;
     const fizzBuzz$ = this.fizzBuzzService.get();
     const game$ = zip<[Choice, Input]>(
       fizzBuzz$,
-      fizzBuzz$.pipe(switchMap(() => this.getUserInput())))
+      fizzBuzz$.pipe(switchMap(() =>
+        this.getUserInput()
+          .pipe(takeLast(1))
+      )))
       .pipe(
         share(),
       );
 
     this.numbers$ = this.fizzBuzzService.getNumbers();
-    // .subscribe(([correctAnswers, givenAnswer]) => {
+    this.userScore$ = game$.pipe(
+      scan((score, [correctAnswer, givenAnswer]) => {
+        this.correctAnswer = correctAnswer;
+        this.guessedNextValue = givenAnswer;
+        console.log('state', score, correctAnswer, givenAnswer);
+        if (givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number')) {
+          score++;
+          this.isCorrect = true;
+        } else {
+          this.isCorrect = false;
+        }
+        return score;
+      }, 0));
+  }
+
+  stopFizzBuzz(): void {
+    this.isRunning = false;
+    this.userScore$ = null;
+    this.guessedNextValue = null;
+    this.isCorrect = null;
+    this.correctAnswer = null;
+  }
+}
+
+// .subscribe(([correctAnswers, givenAnswer]) => {
 //   console.log('given answer:', givenAnswer, ', correct answer is:', correctAnswers);
 //   if (givenAnswer === correctAnswers || (isNumber(correctAnswers) && givenAnswer === 'Number')) {
 //     this.score++;
@@ -76,22 +103,6 @@ export class HomeComponent implements OnInit {
 //   }
 //   this.counter++;
 // });
-    this.userScore$ = game$.pipe(
-      scan((score, [correctAnswer, givenAnswer]) => {
-        console.log('state', score, correctAnswer, givenAnswer);
-        if (givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number')) {
-          score++;
-          this.isCorrect = true;
-        }
-        else {
-          this.isCorrect = false;
-        }
-        return score;
-      }, 0));
-
-    // userScore$.subscribe(value => console.log(value));
-  }
-}
 
 
 // startCountDown(): void {
