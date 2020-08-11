@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {defaultIfEmpty, mapTo, take, takeUntil} from 'rxjs/operators';
-import {fromEvent, interval, merge, Observable, Subscription, zip} from 'rxjs';
+import {first, mapTo, scan, share, switchMap} from 'rxjs/operators';
+import {fromEvent, merge, Observable, Subscription, zip} from 'rxjs';
 import {CountDownService, FizzBuzzService} from '../../services/';
-import {Choice} from '../../models/choice';
+import {Choice, Input} from '../../models/choice';
 
 function isNumber(val: string): boolean {
   return !isNaN(Number(val));
@@ -24,6 +24,12 @@ export class HomeComponent implements OnInit {
   score = 0;
   isCorrect: boolean = null;
   countDown: number;
+  private nrInput$: Observable<Event>;
+  private fizzInput$: Observable<Event>;
+  private buzzInput$: Observable<Event>;
+  private fizzBuzzInput$: Observable<Event>;
+  userScore$: Observable<number>;
+  numbers$: Observable<number>;
 
   constructor(
     private fizzBuzzService: FizzBuzzService,
@@ -32,58 +38,73 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.compareAnswer();
+    this.nrInput$ = fromEvent(document.getElementById('nr-btn'), 'click');
+    this.fizzInput$ = fromEvent(document.getElementById('fizz-btn'), 'click');
+    this.buzzInput$ = fromEvent(document.getElementById('buzz-btn'), 'click');
+    this.fizzBuzzInput$ = fromEvent(document.getElementById('fizzBuzz-btn'), 'click');
   }
 
-  getUserInput(): Observable<Choice> {
-    const nrInput$: Observable<Event> = fromEvent(document.getElementById('nr-btn'), 'click');
-    const fizzInput$: Observable<Event> = fromEvent(document.getElementById('fizz-btn'), 'click');
-    const buzzInput$: Observable<Event> = fromEvent(document.getElementById('buzz-btn'), 'click');
-    const fizzBuzzInput$: Observable<Event> = fromEvent(document.getElementById('fizzBuzz-btn'), 'click');
+  getUserInput(): Observable<Input> {
     return merge(
-      nrInput$.pipe(mapTo('Number')) as Observable<Choice>,
-      fizzInput$.pipe(mapTo('Fizz')) as Observable<Choice>,
-      buzzInput$.pipe(mapTo('Buzz')) as Observable<Choice>,
-      fizzBuzzInput$.pipe(mapTo('FizzBuzz')) as Observable<Choice>,
+      this.nrInput$.pipe(mapTo('Number')),
+      this.fizzInput$.pipe(mapTo('Fizz')),
+      this.buzzInput$.pipe(mapTo('Buzz')),
+      this.fizzBuzzInput$.pipe(mapTo('FizzBuzz')),
     )
-      .pipe(takeUntil(interval(5000)))
-      .pipe(defaultIfEmpty(null));
-    //missing timeout if no button clicked
-    //limit answers with takeLast
-    //transfor to subject to multicast what user clicked
-    //add countdown
+      .pipe<Input>(
+        first(null, null)
+      );
   }
 
-  startFizzBuzz(): Observable<string> {
-    return this.fizzBuzzService.get();
-  }
+  startFizzBuzz(): void {
+    const fizzBuzz$ = this.fizzBuzzService.get();
+    const game$ = zip<[Choice, Input]>(
+      fizzBuzz$,
+      fizzBuzz$.pipe(switchMap(() => this.getUserInput())))
+      .pipe(
+        share(),
+      );
 
-  compareAnswer(): Subscription {
-    return zip(this.getUserInput(), this.startFizzBuzz()
-      .pipe(take(15)))
-      .subscribe(([givenAnswer, correctAnswers]) => {
-        console.log('given', givenAnswer, 'correct', correctAnswers);
-        if (givenAnswer === correctAnswers || (isNumber(correctAnswers) && givenAnswer === 'Number')) {
-          this.score++;
+    this.numbers$ = this.fizzBuzzService.getNumbers();
+    // .subscribe(([correctAnswers, givenAnswer]) => {
+//   console.log('given answer:', givenAnswer, ', correct answer is:', correctAnswers);
+//   if (givenAnswer === correctAnswers || (isNumber(correctAnswers) && givenAnswer === 'Number')) {
+//     this.score++;
+//     this.isCorrect = true;
+//   } else {
+//     this.isCorrect = false;
+//   }
+//   this.counter++;
+// });
+    this.userScore$ = game$.pipe(
+      scan((score, [correctAnswer, givenAnswer]) => {
+        console.log('state', score, correctAnswer, givenAnswer);
+        if (givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number')) {
+          score++;
           this.isCorrect = true;
-        } else {
+        }
+        else {
           this.isCorrect = false;
         }
-        this.counter++;
-      });
-  }
+        return score;
+      }, 0));
 
-  startCountDown(): void {
-    if (this.countDownSubscription) {
-      this.countDownSubscription.unsubscribe();
-    }
-    this.countDownSubscription = this.countDownService
-      .get()
-      .subscribe(response => {
-        this.countDown = response;
-      });
+    // userScore$.subscribe(value => console.log(value));
   }
 }
+
+
+// startCountDown(): void {
+//   if (this.countDownSubscription) {
+//     this.countDownSubscription.unsubscribe();
+//   }
+//   this.countDownSubscription = this.countDownService
+//     .get()
+//     .subscribe(response => {
+//       this.countDown = response;
+//     });
+// }
+
 
 // startFizzBuzz(): void {
 //   this.isRunning = true;
@@ -121,11 +142,7 @@ export class HomeComponent implements OnInit {
 // this.currentValue = '';
 // this.counter = 1;
 // this.score = 0;
-//   this.FizzBuzzSubscription.unsubscribe();
+//   this.fizzBuzzSubscription.unsubscribe();
 //   this.countDownSubscription.unsubscribe();
 // }
-
-
-
-
 

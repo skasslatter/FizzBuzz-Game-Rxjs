@@ -24,31 +24,28 @@
         id="nr-btn"
         class="btn btn-primary">
       <!--        (click)="guessNextValue(counter.toString())"-->
-      {{counter}}</button>
+      {{numbers$ | async}}</button>
       <button
         id="fizz-btn"
         class="btn btn-primary">
-      <!--        (click)="guessNextValue('Fizz')"-->
       Fizz</button>
       <button
         id="buzz-btn"
         class="btn btn-primary">
-      <!--        (click)="guessNextValue('Buzz')">-->
       Buzz
       </button>
       <button
         id="fizzBuzz-btn"
         class="btn btn-primary">
-      <!--        (click)="guessNextValue('FizzBuzz')">-->
       FizzBuzz
       </button>
     </div>
 
-    <table class="table table-striped">
+    <table class="table">
       <tbody>
       <tr>
         <th scope="row">Your answer:</th>
-        <td class="answers">{{guessedNextValue}}</td>
+        <td>{{guessedNextValue}}</td>
       </tr>
       <tr>
         <th scope="row">Correct answer:</th>
@@ -56,7 +53,7 @@
       </tr>
       <tr>
         <th scope="row">Score:</th>
-        <td>{{score}}</td>
+        <td *ngIf="userScore$">{{userScore$ | async}}</td>
       </tr>
       </tbody>
     </table>
@@ -68,7 +65,7 @@
     </div>
 
     <!--    <p><b>Correct answer: </b> {{currentValue}}</p>-->
-    <!--    <p><b>Score: </b>{{score}}</p>-->
+
 
   </div>
 </div>
