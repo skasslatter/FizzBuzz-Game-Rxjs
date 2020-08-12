@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {first, mapTo, scan, share, switchMap, takeLast} from 'rxjs/operators';
-import {fromEvent, merge, Observable, Subscription, zip} from 'rxjs';
+import {fromEvent, interval, merge, Observable, Subscription, zip} from 'rxjs';
 import {CountDownService, FizzBuzzService} from '../../services/';
 import {Choice, Input} from '../../models/choice';
 
@@ -44,18 +44,21 @@ export class HomeComponent implements OnInit {
   }
 
   getUserInput(): Observable<Input> {
+    this.startCountDown();
+    const timerDuration = 5000;
     return merge(
       this.nrInput$.pipe(mapTo('Number')),
       this.fizzInput$.pipe(mapTo('Fizz')),
       this.buzzInput$.pipe(mapTo('Buzz')),
       this.fizzBuzzInput$.pipe(mapTo('FizzBuzz')),
+      interval(timerDuration - 50).pipe(mapTo('None')),
     )
       .pipe<Input>(
         first(null, null)
       );
   }
 
-  startFizzBuzz(): void {
+  startGame(): void {
     this.isRunning = true;
     const fizzBuzz$ = this.fizzBuzzService.get();
     const game$ = zip<[Choice, Input]>(
@@ -66,7 +69,8 @@ export class HomeComponent implements OnInit {
       )))
       .pipe(
         share(),
-      );
+      )
+
 
     this.numbers$ = this.fizzBuzzService.getNumbers();
     this.userScore$ = game$.pipe(
@@ -85,13 +89,14 @@ export class HomeComponent implements OnInit {
   }
 
   stopFizzBuzz(): void {
+    this.countDownSubscription.unsubscribe();
     this.isRunning = false;
     this.userScore$ = null;
     this.guessedNextValue = null;
     this.isCorrect = null;
     this.correctAnswer = null;
   }
-}
+
 
 // .subscribe(([correctAnswers, givenAnswer]) => {
 //   console.log('given answer:', givenAnswer, ', correct answer is:', correctAnswers);
@@ -105,19 +110,21 @@ export class HomeComponent implements OnInit {
 // });
 
 
-// startCountDown(): void {
-//   if (this.countDownSubscription) {
-//     this.countDownSubscription.unsubscribe();
-//   }
-//   this.countDownSubscription = this.countDownService
-//     .get()
-//     .subscribe(response => {
-//       this.countDown = response;
-//     });
-// }
+  startCountDown(): void {
+    if (this.countDownSubscription
+    ) {
+      this.countDownSubscription.unsubscribe();
+    }
+    this.countDownSubscription = this.countDownService
+      .get()
+      .subscribe(response => {
+        this.countDown = response;
+      });
+  }
 
+}
 
-// startFizzBuzz(): void {
+// startGame(): void {
 //   this.isRunning = true;
 //   this.startCountDown();
 //   this.FizzBuzzSubscription = this.fizzBuzzService.get()

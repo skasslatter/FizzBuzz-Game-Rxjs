@@ -13,11 +13,11 @@
     <button
       *ngIf="!isRunning"
       class="btn start-btn"
-      (click)="startFizzBuzz()">
+      (click)="startGame()">
       START
     </button>
     <div *ngIf="isRunning" class="row reset">
-      <!--      <p class="digital col-sm-3">00:0{{countDown}}</p>-->
+            <p class="digital col-sm-3">00:0{{countDown}}</p>
       <button
         class="btn btn-danger"
         (click)="stopFizzBuzz()">RESET
