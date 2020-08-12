@@ -67,11 +67,10 @@ table {
   }
 }
 
-.test {
-  height: 30vh;
+.overflow {
+  max-height: 30vh;
   overflow: scroll;
 }
-
 
 .rules, .score {
   color: var(--secondary-color);

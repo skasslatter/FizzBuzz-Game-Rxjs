@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {first, mapTo, scan, share, switchMap, takeLast} from 'rxjs/operators';
+import {first, map, mapTo, scan, share, switchMap, takeLast} from 'rxjs/operators';
 import {fromEvent, interval, merge, Observable, Subscription, zip} from 'rxjs';
 import {CountDownService, FizzBuzzService} from '../../services/';
-import {Choice, Input} from '../../models/choice';
+import {Choice} from '../../models/choice';
 
 function isNumber(val: string): boolean {
   return !isNaN(Number(val));
@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit {
   countDownSubscription: Subscription;
 
   isRunning = false;
-  isCorrect: boolean = null;
   countDown: number;
   private nrInput$: Observable<Event>;
   private fizzInput$: Observable<Event>;
@@ -26,8 +25,8 @@ export class HomeComponent implements OnInit {
   private fizzBuzzInput$: Observable<Event>;
   userScore$: Observable<number>;
   numbers$: Observable<number>;
-  correctAnswer: 'Fizz' | 'Buzz' | 'FizzBuzz' | 'Number';
-  history$: Observable<[]>;
+  history$: Observable<[number, Choice, Choice, boolean]>;
+  isCorrect$: Observable<boolean>;
 
   constructor(
     private fizzBuzzService: FizzBuzzService,
@@ -42,9 +41,8 @@ export class HomeComponent implements OnInit {
     this.fizzBuzzInput$ = fromEvent(document.getElementById('fizzBuzz-btn'), 'click');
   }
 
-  getUserInput(): Observable<Input> {
+  getUserInput(): Observable<Choice> {
     this.startCountDown();
-
     const timerDuration = 5000;
     return merge(
       this.nrInput$.pipe(mapTo('Number')),
@@ -53,7 +51,7 @@ export class HomeComponent implements OnInit {
       this.fizzBuzzInput$.pipe(mapTo('FizzBuzz')),
       interval(timerDuration - 50).pipe(mapTo('None')),
     )
-      .pipe<Input>(
+      .pipe<Choice>(
         first(null, null)
       );
   }
@@ -61,7 +59,7 @@ export class HomeComponent implements OnInit {
   startGame(): void {
     this.isRunning = true;
     const fizzBuzz$ = this.fizzBuzzService.get();
-    const game$ = zip<[Choice, Input]>(
+    const game$ = zip<[Choice, Choice]>(
       fizzBuzz$,
       fizzBuzz$.pipe(switchMap(() =>
         this.getUserInput()
@@ -73,29 +71,32 @@ export class HomeComponent implements OnInit {
     this.calcScore(game$);
   }
 
-  calcScore(game$): void {
+  calcScore(game$: Observable<[Choice, Choice]>): void {
     this.numbers$ = this.fizzBuzzService.getNumbers();
 
+    this.isCorrect$ = game$.pipe(map(([correctAnswer, givenAnswer]) => {
+      return givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number');
+    }));
 
-    this.userScore$ = game$.pipe(
-      scan((score, [correctAnswer, givenAnswer]) => {
-        if (givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number')) {
+    this.userScore$ = this.isCorrect$.pipe(
+      scan((score, isCorrect) => {
+        if (isCorrect) {
           score++;
-          this.isCorrect = true;
-        } else {
-          this.isCorrect = false;
         }
         return score;
       }, 0));
-    this.getHistory(game$);
-  }
 
-  getHistory(game$): void {
-    this.history$ = game$.pipe(
-      scan((history, [correctAnswer, givenAnswer]) => {
-        history.push([correctAnswer, givenAnswer, this.isCorrect]);
-        return history;
-      }, []));
+    this.history$ = zip<[number, [Choice, Choice], boolean]>(
+      this.numbers$,
+      game$,
+      this.isCorrect$
+    )
+      .pipe(map(([num, [correctAnswer, givenAnswer], isCorrect]) => {
+        return [num, correctAnswer, givenAnswer, isCorrect];
+      }));
+    this.history$.subscribe(value => {
+      console.log(value);
+    });
   }
 
   stopFizzBuzz(): void {
@@ -103,7 +104,7 @@ export class HomeComponent implements OnInit {
     this.history$ = null;
     this.isRunning = false;
     this.userScore$ = null;
-    this.isCorrect = null;
+    this.isCorrect$ = null;
   }
 
   startCountDown(): void {
