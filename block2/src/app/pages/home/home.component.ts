@@ -97,8 +97,8 @@ export class HomeComponent implements OnInit {
           return {num, correctAnswer, givenAnswer, isCorrect} as History;
         }))
         .pipe(scan((acc: History[], historyItem) => {
-           acc.push(historyItem);
-           return acc;
+            acc.push(historyItem);
+            return acc;
           }, [])
         );
   }

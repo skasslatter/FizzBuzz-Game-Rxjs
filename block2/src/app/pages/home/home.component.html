@@ -1,88 +1,85 @@
 <div class="container main">
 
-  <h1 class="text-center">FizzBuzz Game <span class="rules">!</span></h1>
+  <h1 class="text-center">FizzBuzz Game <span class="secondary-color">!</span></h1>
 
   <section class="explanation">
-    <p><span class="rules">Fizz</span>: if the number can be divided by <b>3</b></p>
-    <p><span class="rules">Buzz</span>: if the number can be divided by <b>5</b></p>
-    <p><span class="rules">FizzBuzz</span>: if the number can be divided by <b>3 and 5</b></p>
-    <p><span class="rules">Number</span>: if none of the above are applicable</p>
+    <p><i>Chose one options for every number. You have 5 seconds for each number.</i></p>
+    <ul class="rules">
+      <li><span class="secondary-color">Fizz</span>: if the number can be divided by 3</li>
+      <li><span class="secondary-color">Buzz</span>: if the number can be divided by 5</li>
+      <li><span class="secondary-color">FizzBuzz</span>: if the number can be divided by 3 and 5</li>
+      <li><span class="secondary-color">Number</span>: if none of the above are applicable</li>
+    </ul>
   </section>
 
-  <div class="d-flex justify-content-center">
-    <button
-      *ngIf="!isRunning"
-      class="btn start-btn"
-      (click)="startGame()">
-      START
-    </button>
-    <div *ngIf="isRunning" class="row reset">
-      <p class="digital col-sm-3">00:0{{countDown}}</p>
+  <section>
+    <div *ngIf="!isRunning" class="text-center">
       <button
-        class="btn btn-danger"
-        (click)="stopFizzBuzz()">RESET
+        class="btn start-btn"
+        (click)="startGame()">
+        START
       </button>
     </div>
-  </div>
+
+    <div *ngIf="isRunning">
+      <div class="text-center">
+        <button
+          class="btn btn-danger"
+          (click)="stopFizzBuzz()">RESET
+        </button>
+      </div>
+      <!--      <div class="game">-->
+      <!--        <p class="digital">00:0{{countDown}}</p>-->
+      <!--        <p>Current number: <span class="secondary-color">{{numbers$ | async}}</span></p>-->
+      <!--        <p>Score: <span class="secondary-color">{{userScore$ | async}}</span></p>-->
+      <!--      </div>-->
+    </div>
+  </section>
 
   <section [ngClass]="!isRunning ? 'hidden' : 'visible' ">
-    <div class="fizzBuzz-buttons">
-      <button
-        id="fizz-btn"
-        class="btn">
-        Fizz
-      </button>
-      <button
-        id="buzz-btn"
-        class="btn">
-        Buzz
-      </button>
-      <button
-        id="fizzBuzz-btn"
-        class="btn">
-        FizzBuzz
-      </button>
-      <button
-        id="nr-btn"
-        class="btn">
-        {{numbers$ | async}}
-      </button>
-      <div>
-        <p class="score">Score: {{userScore$ | async}}</p>
+    <div class="fizzBuzz-game">
+      <div class="game-controller">
+        <p class="digital secondary-color">00:0{{countDown}}</p>
+        <p>Current number: <span class="secondary-color">{{numbers$ | async}}</span></p>
+        <p>Score: <span class="secondary-color">{{userScore$ | async}}</span></p>
+      </div>
+      <div class="fizzBuzz-buttons">
+        <button
+          id="nr-btn"
+          class="btn"
+        >
+          {{numbers$ | async}}
+        </button>
+        <button
+          id="fizz-btn"
+          class="btn"
+        >
+          Fizz
+        </button>
+        <button
+          id="buzz-btn"
+          class="btn"
+        >
+          Buzz
+        </button>
+        <button
+          id="fizzBuzz-btn"
+          class="btn"
+        >
+          FizzBuzz
+        </button>
       </div>
     </div>
 
-    <!--    <table class="table table-borderless">-->
-    <!--      <tbody>-->
-    <!--      <tr>-->
-    <!--        <th scope="row">Your answer:</th>-->
-    <!--        <td>{{guessedNextValue}}</td>-->
-    <!--        <td>-->
-    <!--          <span *ngIf="isCorrect" class="correct">Well done!</span>-->
-    <!--          <span *ngIf="!isCorrect && isCorrect != null" class="wrong">Wrong answer</span>-->
-    <!--        </td>-->
-    <!--      </tr>-->
-    <!--      <tr>-->
-    <!--        <th scope="row">Correct answer:</th>-->
-    <!--        <td>{{correctAnswer}}</td>-->
-    <!--      </tr>-->
-    <!--      <tr>-->
-    <!--        <th scope="row">Score:</th>-->
-    <!--        <td>{{userScore$ | async}}</td>-->
-    <!--      </tr>-->
-    <!--      </tbody>-->
-    <!--    </table>-->
-
     <div class="overflow">
-      <table class="table table-borderless">
+      <table class="table table-bordered">
         <thead>
         <tr class="text-center">
           <th>Number</th>
           <th>Correct Answer</th>
           <th>Your Answer</th>
           <th></th>
-        </tr>
-        </thead>
+        </tr>        </thead>
         <tbody>
         <tr *ngFor="let historyItem of history$ | async">
           <td>{{historyItem.num}}</td>
