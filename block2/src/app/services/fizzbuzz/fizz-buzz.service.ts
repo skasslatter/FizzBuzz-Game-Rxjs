@@ -1,29 +1,37 @@
 import {Injectable} from '@angular/core';
-import {interval, Observable, zip} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {interval, Observable, timer, zip} from 'rxjs';
+import {map, share} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FizzBuzzService {
+  numbers$: Observable<number>;
 
   constructor() {
   }
 
-  get(): Observable<string> {
-    const numbers$: Observable<number> = interval(6000)
-      .pipe(map(n => n += 1));
+  getNumbers(): Observable<number>{
+    return this.numbers$;
+  }
 
-    const fizz$: Observable<string> = numbers$
+  get(): Observable<string> {
+    this.numbers$ = timer(0, 6000).pipe(
+      map(n => n + 1),
+      share(),
+    );
+
+    const fizz$: Observable<string> = this.getNumbers()
       .pipe(map(n => n % 3 === 0 ? 'Fizz' : '')
       );
 
-    const buzz$: Observable<string> = numbers$
+    const buzz$: Observable<string> = this.getNumbers()
       .pipe(map(n => n % 5 === 0 ? 'Buzz' : '')
       );
 
-    return  zip(numbers$, fizz$, buzz$)
-      .pipe(map(([n, fizz, buzz]) => `${fizz}${buzz}` || n.toString()));
+    return  zip(this.getNumbers(), fizz$, buzz$)
+      .pipe(map(([n, fizz, buzz]) =>
+        `${fizz}${buzz}` || n.toString()));
   }
 }
 

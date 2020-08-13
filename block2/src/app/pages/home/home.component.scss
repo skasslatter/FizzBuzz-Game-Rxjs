@@ -1,33 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 
-.explanation, .fizzBuzz-buttons {
-  margin: 5vh;
+.explanation {
+  margin: 3vh 0;
+  text-align: center;
 }
 
 .main {
   padding: 5vh;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-top: 3vh;
+  border-radius: 35px;
 }
 
 .correct {
   color: green;
+  font-weight: 600;
 }
 
 .wrong {
   color: red;
+  font-weight: 600;
 }
 
 .digital {
   font-family: 'Orbitron', sans-serif;
 }
 
-.reset {
+.game-controller {
   display: flex;
-  justify-content: center;
-  align-items: baseline;
+  justify-content: space-around;
 }
 
-.answers {
-  min-width: 8vw;
+.start-btn {
+  background: var(--base-color);
+  color: whitesmoke;
 }
+
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.fizzBuzz-game {
+  margin: 5vh;
+  display: flex;
+  padding: 2vh;
+  border-radius: 32px;
+  background-color: lighten(#ff7800, 45%);
+  border: 1px solid rgba(255, 161, 77, 0.1);
+  flex-direction: column;
+}
+
+.fizzBuzz-buttons {
+  display: flex;
+  justify-content: space-evenly;
+
+  button {
+    background-color: darken(#ff7800, 5%);
+    color: whitesmoke;
+  }
+}
+
+table {
+  table-layout: fixed;
+  overflow: scroll;
+
+  td {
+    text-align: center;
+  }
+}
+
+.overflow {
+  max-height: 30vh;
+  overflow: scroll;
+}
+
+.secondary-color {
+  color: var(--secondary-color);
+}
+
+.rules {
+  list-style: none;
+}
+
+
+
