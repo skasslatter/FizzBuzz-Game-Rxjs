@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
   userScore$: Observable<number>;
   numbers$: Observable<number>;
   history$: Observable<History[]>;
-  isCorrect$: Observable<boolean>;
 
   constructor(
     private fizzBuzzService: FizzBuzzService,
@@ -69,17 +68,14 @@ export class HomeComponent implements OnInit {
       .pipe(
         share(),
       );
-    this.calcScore(game$);
-  }
 
-  calcScore(game$: Observable<[Choice, Choice]>): void {
     this.numbers$ = this.fizzBuzzService.getNumbers();
 
-    this.isCorrect$ = game$.pipe(map(([correctAnswer, givenAnswer]) => {
+    const isCorrect$: Observable<boolean> = game$.pipe(map(([correctAnswer, givenAnswer]) => {
       return givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number');
     }));
 
-    this.userScore$ = this.isCorrect$.pipe(
+    this.userScore$ = isCorrect$.pipe(
       scan((score, isCorrect) => {
         if (isCorrect) {
           score++;
@@ -91,7 +87,7 @@ export class HomeComponent implements OnInit {
       zip(
         this.numbers$,
         game$,
-        this.isCorrect$
+        isCorrect$
       )
         .pipe(map(([num, [correctAnswer, givenAnswer], isCorrect]) => {
           return {num, correctAnswer, givenAnswer, isCorrect} as History;
@@ -105,10 +101,7 @@ export class HomeComponent implements OnInit {
 
   stopFizzBuzz(): void {
     this.countDownSubscription.unsubscribe();
-    this.history$ = null;
     this.isRunning = false;
-    this.userScore$ = null;
-    this.isCorrect$ = null;
   }
 
   startCountDown(): void {

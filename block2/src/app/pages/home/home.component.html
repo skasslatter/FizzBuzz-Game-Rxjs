@@ -28,11 +28,6 @@
           (click)="stopFizzBuzz()">RESET
         </button>
       </div>
-      <!--      <div class="game">-->
-      <!--        <p class="digital">00:0{{countDown}}</p>-->
-      <!--        <p>Current number: <span class="secondary-color">{{numbers$ | async}}</span></p>-->
-      <!--        <p>Score: <span class="secondary-color">{{userScore$ | async}}</span></p>-->
-      <!--      </div>-->
     </div>
   </section>
 
@@ -79,7 +74,8 @@
           <th>Correct Answer</th>
           <th>Your Answer</th>
           <th></th>
-        </tr>        </thead>
+        </tr>
+        </thead>
         <tbody>
         <tr *ngFor="let historyItem of history$ | async">
           <td>{{historyItem.num}}</td>
