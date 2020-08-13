@@ -90,7 +90,7 @@
           <td>{{historyItem.givenAnswer}}</td>
           <td>
             <span *ngIf="historyItem.isCorrect" class="correct"> 👍 Well done!</span>
-            <span *ngIf="historyItem.isCorrect" class="wrong">😔 Wrong</span>
+            <span *ngIf="!historyItem.isCorrect" class="wrong">😔 Wrong</span>
           </td>
         </tr>
         </tbody>
