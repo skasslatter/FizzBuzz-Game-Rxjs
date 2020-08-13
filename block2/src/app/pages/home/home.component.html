@@ -84,16 +84,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let valuePair of history$ | async; let i = index">
-          <td>{{i + 1}}</td>
-          <td>{{valuePair[0]}}</td>
-          <td *ngIf="valuePair[1] !== 'Number', else isNumber">{{valuePair[1]}}</td>
-          <ng-template #isNumber>
-            <td>{{i + 1}}</td>
-          </ng-template>
+        <tr *ngFor="let historyItem of history$ | async">
+          <td>{{historyItem.num}}</td>
+          <td>{{historyItem.correctAnswer}}</td>
+          <td>{{historyItem.givenAnswer}}</td>
           <td>
-            <span *ngIf="valuePair[2]" class="correct"> 👍 Well done!</span>
-            <span *ngIf="!valuePair[2]" class="wrong">😔 Wrong</span>
+            <span *ngIf="historyItem.isCorrect" class="correct"> 👍 Well done!</span>
+            <span *ngIf="historyItem.isCorrect" class="wrong">😔 Wrong</span>
           </td>
         </tr>
         </tbody>

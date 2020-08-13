@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {first, map, mapTo, scan, share, switchMap, takeLast} from 'rxjs/operators';
 import {fromEvent, interval, merge, Observable, Subscription, zip} from 'rxjs';
 import {CountDownService, FizzBuzzService} from '../../services/';
-import {Choice} from '../../models/choice';
+import {Choice} from '../../models/choice/choice';
+import {History} from '../../models/history/history';
 
 function isNumber(val: string): boolean {
   return !isNaN(Number(val));
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
   private fizzBuzzInput$: Observable<Event>;
   userScore$: Observable<number>;
   numbers$: Observable<number>;
-  history$: Observable<[number, Choice, Choice, boolean]>;
+  history$: Observable<History[]>;
   isCorrect$: Observable<boolean>;
 
   constructor(
@@ -86,17 +87,20 @@ export class HomeComponent implements OnInit {
         return score;
       }, 0));
 
-    this.history$ = zip<[number, [Choice, Choice], boolean]>(
-      this.numbers$,
-      game$,
-      this.isCorrect$
-    )
-      .pipe(map(([num, [correctAnswer, givenAnswer], isCorrect]) => {
-        return [num, correctAnswer, givenAnswer, isCorrect];
-      }));
-    this.history$.subscribe(value => {
-      console.log(value);
-    });
+    this.history$ =
+      zip(
+        this.numbers$,
+        game$,
+        this.isCorrect$
+      )
+        .pipe(map(([num, [correctAnswer, givenAnswer], isCorrect]) => {
+          return {num, correctAnswer, givenAnswer, isCorrect} as History;
+        }))
+        .pipe(scan((acc: History[], historyItem) => {
+           acc.push(historyItem);
+           return acc;
+          }, [])
+        );
   }
 
   stopFizzBuzz(): void {
@@ -119,44 +123,3 @@ export class HomeComponent implements OnInit {
       });
   }
 }
-
-// startGame(): void {
-//   this.isRunning = true;
-//   this.startCountDown();
-//   this.FizzBuzzSubscription = this.fizzBuzzService.get()
-//     .pipe(take(15))
-// .subscribe(response => {
-//   this.startCountDown();
-// this.counter++;
-// this.currentValue = response;
-// this.calcPoints();
-// this.guessedNextValue = '';
-//     });
-// }
-
-// guessNextValue(value: string): void {
-//   this.isCorrect = null;
-//   this.currentValue = '';
-//   this.guessedNextValue = value;
-// }
-
-// calcPoints(): void {
-//   if (this.guessedNextValue === this.currentValue) {
-//     this.score++;
-//     this.isCorrect = true;
-//   } else {
-//     this.isCorrect = false;
-//   }
-// }
-
-// stopCounter(): void {
-// this.guessedNextValue = '';
-// this.isRunning = false;
-// this.isCorrect = null;
-// this.currentValue = '';
-// this.counter = 1;
-// this.score = 0;
-//   this.fizzBuzzSubscription.unsubscribe();
-//   this.countDownSubscription.unsubscribe();
-// }
-
