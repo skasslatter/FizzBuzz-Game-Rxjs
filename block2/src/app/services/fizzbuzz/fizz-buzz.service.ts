@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {interval, Observable, timer, zip} from 'rxjs';
+import {Observable, timer, zip} from 'rxjs';
 import {map, share} from 'rxjs/operators';
 
 @Injectable({

@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 
+h1 {
+  color: var(--base-color);
+  font-weight: 600;
+  margin-bottom: 3vh;
+}
+
 .explanation {
   margin: 3vh 0;
   text-align: center;
@@ -74,8 +80,9 @@ table {
   }
 }
 
-.overflow {
-  max-height: 30vh;
+.history-table {
+  min-height: 22vh;
+  max-height: 22vh;
   overflow: scroll;
 }
 
@@ -87,5 +94,22 @@ table {
   list-style: none;
 }
 
+.number {
+  display: flex;
+  justify-content: center;
 
+  h2 {
+    text-align: center;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    padding: 12px;
+    background: #fff;
+    border: 2px solid var(--secondary-color);
+    color: #666;
+  }
+}
 
+.start-stop {
+  margin: 3vh;
+}

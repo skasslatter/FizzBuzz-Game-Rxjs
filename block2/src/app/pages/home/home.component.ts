@@ -18,12 +18,13 @@ export class HomeComponent implements OnInit {
   FizzBuzzSubscription: Subscription;
   countDownSubscription: Subscription;
 
-  isRunning = false;
-  countDown: number;
   private nrInput$: Observable<Event>;
   private fizzInput$: Observable<Event>;
   private buzzInput$: Observable<Event>;
   private fizzBuzzInput$: Observable<Event>;
+
+  isRunning = false;
+  countDown: number;
   userScore$: Observable<number>;
   numbers$: Observable<number>;
   history$: Observable<History[]>;
@@ -43,13 +44,14 @@ export class HomeComponent implements OnInit {
 
   getUserInput(): Observable<Choice> {
     this.startCountDown();
+
     const timerDuration = 5000;
     return merge(
       this.nrInput$.pipe(mapTo('Number')),
       this.fizzInput$.pipe(mapTo('Fizz')),
       this.buzzInput$.pipe(mapTo('Buzz')),
       this.fizzBuzzInput$.pipe(mapTo('FizzBuzz')),
-      interval(timerDuration - 50).pipe(mapTo('None')),
+      interval(timerDuration - 50).pipe(mapTo('-')),
     )
       .pipe<Choice>(
         first(null, null)
@@ -59,6 +61,7 @@ export class HomeComponent implements OnInit {
   startGame(): void {
     this.isRunning = true;
     const fizzBuzz$ = this.fizzBuzzService.get();
+
     const game$ = zip<[Choice, Choice]>(
       fizzBuzz$,
       fizzBuzz$.pipe(switchMap(() =>
@@ -71,9 +74,10 @@ export class HomeComponent implements OnInit {
 
     this.numbers$ = this.fizzBuzzService.getNumbers();
 
-    const isCorrect$: Observable<boolean> = game$.pipe(map(([correctAnswer, givenAnswer]) => {
-      return givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number');
-    }));
+    const isCorrect$: Observable<boolean> = game$.pipe(
+      map(([correctAnswer, givenAnswer]) => {
+        return givenAnswer === correctAnswer || (isNumber(correctAnswer) && givenAnswer === 'Number');
+      }));
 
     this.userScore$ = isCorrect$.pipe(
       scan((score, isCorrect) => {
@@ -83,20 +87,19 @@ export class HomeComponent implements OnInit {
         return score;
       }, 0));
 
-    this.history$ =
-      zip(
-        this.numbers$,
-        game$,
-        isCorrect$
-      )
-        .pipe(map(([num, [correctAnswer, givenAnswer], isCorrect]) => {
-          return {num, correctAnswer, givenAnswer, isCorrect} as History;
-        }))
-        .pipe(scan((acc: History[], historyItem) => {
-            acc.push(historyItem);
-            return acc;
-          }, [])
-        );
+    this.history$ = zip(
+      this.numbers$,
+      game$,
+      isCorrect$
+    )
+      .pipe(map(([num, [correctAnswer, givenAnswer], isCorrect]) => {
+        return {num, correctAnswer, givenAnswer, isCorrect} as History;
+      }))
+      .pipe(scan((acc: History[], historyItem) => {
+          acc.unshift(historyItem);
+          return acc;
+        }, [])
+      );
   }
 
   stopFizzBuzz(): void {

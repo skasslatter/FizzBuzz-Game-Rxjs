@@ -1,22 +1,23 @@
 <div class="container main">
-
   <h1 class="text-center">FizzBuzz Game <span class="secondary-color">!</span></h1>
 
-  <section class="explanation">
-    <p><i>Chose one options for every number. You have 5 seconds for each number.</i></p>
-    <ul class="rules">
-      <li><span class="secondary-color">Fizz</span>: if the number can be divided by 3</li>
-      <li><span class="secondary-color">Buzz</span>: if the number can be divided by 5</li>
-      <li><span class="secondary-color">FizzBuzz</span>: if the number can be divided by 3 and 5</li>
-      <li><span class="secondary-color">Number</span>: if none of the above are applicable</li>
-    </ul>
-  </section>
 
-  <section>
+<!--  <section class="explanation">-->
+<!--    <p><i>Chose one options for every number. You have 5 seconds for each number.</i></p>-->
+<!--    <ul class="rules">-->
+<!--      <li><span class="secondary-color">Fizz</span>: if the number can be divided by 3</li>-->
+<!--      <li><span class="secondary-color">Buzz</span>: if the number can be divided by 5</li>-->
+<!--      <li><span class="secondary-color">FizzBuzz</span>: if the number can be divided by 3 and 5</li>-->
+<!--      <li><span class="secondary-color">Number</span>: if none of the above are applicable</li>-->
+<!--    </ul>-->
+<!--  </section>-->
+
+  <section class="start-stop">
     <div *ngIf="!isRunning" class="text-center">
       <button
         class="btn start-btn"
-        (click)="startGame()">
+        (click)="startGame()"
+      >
         START
       </button>
     </div>
@@ -25,19 +26,26 @@
       <div class="text-center">
         <button
           class="btn btn-danger"
-          (click)="stopFizzBuzz()">RESET
+          (click)="stopFizzBuzz()"
+        >
+          RESET
         </button>
       </div>
     </div>
   </section>
 
   <section [ngClass]="!isRunning ? 'hidden' : 'visible' ">
+    <div class="number">
+    <h2>{{numbers$ | async}}</h2>
+    </div>
+
     <div class="fizzBuzz-game">
       <div class="game-controller">
         <p class="digital secondary-color">00:0{{countDown}}</p>
-        <p>Current number: <span class="secondary-color">{{numbers$ | async}}</span></p>
+<!--        <p>Current number: <span class="secondary-color">{{numbers$ | async}}</span></p>-->
         <p>Score: <span class="secondary-color">{{userScore$ | async}}</span></p>
       </div>
+
       <div class="fizzBuzz-buttons">
         <button
           id="nr-btn"
@@ -66,7 +74,7 @@
       </div>
     </div>
 
-    <div class="overflow">
+    <div class="history-table">
       <table class="table table-bordered">
         <thead>
         <tr class="text-center">
@@ -83,7 +91,7 @@
           <td>{{historyItem.givenAnswer}}</td>
           <td>
             <span *ngIf="historyItem.isCorrect" class="correct"> 👍 Well done!</span>
-            <span *ngIf="!historyItem.isCorrect" class="wrong">😔 Wrong</span>
+            <span *ngIf="!historyItem.isCorrect" class="wrong"> 😔 Wrong</span>
           </td>
         </tr>
         </tbody>
