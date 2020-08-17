@@ -1,27 +1,56 @@
-# Block2
+## My solution
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.2.
+## Provide one or multiple examples of code that you’re proud of and explain why
 
-## Development server
+- [this.history$](https://gitlab.pxlwidgets.com/pxl.widgets-heroes/rxjs-lessons/blob/block2_part2_sybille/block2/src/app/pages/home/home.component.spec.ts)
+    - I am proud that I managed to use an Observable for my history list, which combines a zip, map and scan, something that I wouldn't have been able to do even a few days ago.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Provide one or multiple examples of code that you’re NOT proud of and explain why
 
-## Code scaffolding
+- [CountDown()](https://gitlab.pxlwidgets.com/pxl.widgets-heroes/assignments/blob/block1_sybille/beerApp/src/app/pages/brewery/brewery-list/brewery-list.component.ts)
+    - I am not proud of it because it's an Observable that is not based on any other of my Observables. At the moment I am subscribing to the countDownService everytime I get an UserInput. 
+    - If I had more time I would try to connect it to my other Observables instead of having it stand by itself. 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## What are some ways you would like to improve the application if you had time?
 
-## Running unit tests
+- connect my CountDown Observable to my other Observables
 
-Run `ng currentValue` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## What issues did you run into and how did you solve them?
 
-## Running end-to-end tests
+- It was quite challenging to refactor the game after having a working version, but without Observable. It took some time to change my mindset and to understand the added value of Observables
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+    
 
-## Further help
+## Research topics
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### What topics did you come across that you particularly liked or found interesting?
+
+- The huge number operators of RxJs
+
+### What topics did you come across that you’d like to learn more about?
+
+- different real life used cases of Observables and the operators
+
+## Assignment
+
+### What did you like about the assignment?
+
+- developing a game was fun
+
+### What didn’t you like about the assignment?
+
+- the refactoring. The assignment might have less complicated if we had the instructions to use only Observables from day one
+- not a real life example
+
+## Workflow
+
+### Do you think we briefed you sufficiently?
+
+- yes, for the first part of the assignment. For the second part of the assignment it would have been nice to have the workshop with Tom earlier.
+
+### Did you have enough support from your buddies while working on the assignment?
+
+- Yes
+
