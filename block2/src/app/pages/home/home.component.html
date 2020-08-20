@@ -41,7 +41,7 @@
 
     <div class="fizzBuzz-game">
       <div class="game-controller">
-        <p class="digital secondary-color">00:0{{countDown}}</p>
+        <p class="digital secondary-color">{{countDown | minuteSeconds}}</p>
 <!--        <p>Current number: <span class="secondary-color">{{numbers$ | async}}</span></p>-->
         <p>Score: <span class="secondary-color">{{userScore$ | async}}</span></p>
       </div>
